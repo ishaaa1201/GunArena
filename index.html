@@ -167,6 +167,7 @@
                 this.initVR();
                 this.initArena();
                 this.initUI3D();
+                this.initAudio();
                 this.animate();
             }
 
@@ -308,6 +309,64 @@
                 this.enemies = []; this.bullets = []; this.particles = []; this.clock = new THREE.Clock();
             }
 
+            initAudio() {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) {
+                    this.audioCtx = new AudioContext();
+                }
+            }
+
+            playShootSound() {
+                if (!this.audioCtx) return;
+                if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
+                const t = this.audioCtx.currentTime;
+                const osc = this.audioCtx.createOscillator();
+                const gain = this.audioCtx.createGain();
+                
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(880, t);
+                osc.frequency.exponentialRampToValueAtTime(110, t + 0.1);
+                
+                gain.gain.setValueAtTime(0.1, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+                
+                osc.connect(gain);
+                gain.connect(this.audioCtx.destination);
+                
+                osc.start(t);
+                osc.stop(t + 0.1);
+            }
+
+            playExplosionSound() {
+                if (!this.audioCtx) return;
+                if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
+                const bufferSize = this.audioCtx.sampleRate * 0.3;
+                const buffer = this.audioCtx.createBuffer(1, bufferSize, this.audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+                
+                const noise = this.audioCtx.createBufferSource();
+                noise.buffer = buffer;
+                
+                const filter = this.audioCtx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.value = 1000;
+                filter.frequency.exponentialRampToValueAtTime(100, this.audioCtx.currentTime + 0.3);
+                
+                const gain = this.audioCtx.createGain();
+                const t = this.audioCtx.currentTime;
+                gain.gain.setValueAtTime(0.3, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
+                
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.audioCtx.destination);
+                
+                noise.start(t);
+            }
+
             onTriggerDown(index) {
                 if (this.state.isGameOver) { location.reload(); return; }
                 if (!this.state.gameStarted) { this.state.gameStarted = true; this.uiPanel.visible = false; this.startWave(); return; }
@@ -322,6 +381,7 @@
                 this.lastShotTime[index] = now;
                 this.ammo[index]--;
                 this.updateGunHUD(index);
+                this.playShootSound();
                 const controller = this.controllers[index];
                 const startPos = new THREE.Vector3();
                 const direction = new THREE.Vector3(0, 0, -1);
@@ -437,12 +497,18 @@
                 for (let i = this.enemies.length - 1; i >= 0; i--) {
                     const e = this.enemies[i];
                     const toPlayer = new THREE.Vector3().subVectors(playerPos, e.mesh.position).normalize();
-                    if (e.type === 'popper') e.mesh.position.add(toPlayer.multiplyScalar(e.speed));
-                    else if (e.mesh.position.distanceTo(playerPos) > 8) e.mesh.position.add(toPlayer.multiplyScalar(e.speed));
-                    else if (Date.now() - e.lastShot > 2000) {
+                    const distToPlayer = e.mesh.position.distanceTo(playerPos);
+                    const minDistance = 1.5; // Boundary to prevent overlap
+
+                    if (e.type === 'popper') {
+                        if (distToPlayer > minDistance) e.mesh.position.add(toPlayer.multiplyScalar(e.speed));
+                    } else if (distToPlayer > 8) {
+                        e.mesh.position.add(toPlayer.multiplyScalar(e.speed));
+                    } else if (Date.now() - e.lastShot > 2000) {
                         e.lastShot = Date.now();
                         this.spawnBullet(e.mesh.position.clone(), toPlayer.clone().multiplyScalar(0.15), false, 10, COLORS.RED);
                     }
+                    
                     for (let j = this.bullets.length - 1; j >= 0; j--) {
                         const b = this.bullets[j];
                         if (b.isPlayer && b.mesh.position.distanceTo(e.mesh.position) < 0.6) {
@@ -457,6 +523,7 @@
                             if (e.health <= 0) { 
                                 this.state.score += 20; 
                                 this.createExplosion(e.mesh.position, e.colorHex);
+                                this.playExplosionSound();
                                 this.scene.remove(e.mesh); 
                                 this.enemies.splice(i, 1); 
                                 break; 
