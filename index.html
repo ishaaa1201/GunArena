@@ -14,6 +14,7 @@
             font-family: 'Inter', sans-serif;
             color: white;
             user-select: none;
+            -webkit-user-select: none;
         }
         canvas {
             display: block;
@@ -57,7 +58,7 @@
             <div class="text-[10px] uppercase tracking-widest text-white/50 font-bold">System Integrity</div>
         </div>
 
-        <!-- Ammo HUD (Floating near hands conceptually, but fixed for screen preview) -->
+        <!-- Ammo HUD -->
         <div class="absolute bottom-12 left-12 flex flex-col gap-1">
             <div class="text-[10px] uppercase tracking-widest text-[#FF00FF] font-bold">Left Gun</div>
             <div id="ammo-left" class="text-2xl font-mono font-bold italic">12/12</div>
@@ -78,36 +79,36 @@
                 360° Neon-Pop Combat Simulation<br>
                 Aim with Mouse | Left/Right Click to Fire
             </p>
-            <button id="btn-start" class="group relative px-12 py-5 bg-white text-black font-black uppercase tracking-[0.2em] hover:bg-[#FF00FF] hover:text-white transition-all duration-300 overflow-hidden">
+            <button id="btn-start" class="group relative px-12 py-5 bg-white text-black font-black uppercase tracking-[0.2em] hover:bg-[#FF00FF] hover:text-white transition-all duration-300 overflow-hidden rounded-md cursor-pointer pointer-events-auto">
                 <span class="relative z-10">Enter Arena</span>
                 <div class="absolute inset-0 bg-cyan translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
             </button>
         </div>
     </div>
 
-    <div id="screen-shop" class="fixed inset-0 flex items-center justify-center bg-black/95 z-30 hidden opacity-0 transition-opacity duration-500">
+    <div id="screen-shop" class="fixed inset-0 flex items-center justify-center bg-black/95 z-30 hidden opacity-0 transition-opacity duration-500 pointer-events-auto">
         <div class="bg-gray-900/50 border border-white/10 p-12 rounded-[2rem] backdrop-blur-3xl max-w-2xl w-full mx-4">
             <div class="flex items-center justify-between mb-10">
                 <div class="flex items-center gap-4">
-                    <h2 class="text-5xl font-black uppercase italic tracking-tighter text-cyan">Neon Shop</h2>
+                    <h2 class="text-5xl font-black uppercase italic tracking-tighter text-cyan neon-text-cyan">Neon Shop</h2>
                 </div>
                 <div class="text-xs uppercase tracking-widest text-white/40">Wave Complete</div>
             </div>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <button onclick="game.upgrade('damage')" class="shop-item flex flex-col items-start p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-[#FFFF00] transition-all text-left group">
+                <button onclick="window.game.upgrade('damage')" class="shop-item cursor-pointer flex flex-col items-start p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-[#FFFF00] transition-all text-left group">
                     <div class="text-xl font-black uppercase italic tracking-tight mb-1 group-hover:text-[#FFFF00]">Damage Up</div>
                     <div class="text-[10px] text-gray-500 uppercase tracking-widest">Increase energy output</div>
                 </button>
-                <button onclick="game.upgrade('fireRate')" class="shop-item flex flex-col items-start p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-[#FF00FF] transition-all text-left group">
+                <button onclick="window.game.upgrade('fireRate')" class="shop-item cursor-pointer flex flex-col items-start p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-[#FF00FF] transition-all text-left group">
                     <div class="text-xl font-black uppercase italic tracking-tight mb-1 group-hover:text-[#FF00FF]">Fire Rate</div>
                     <div class="text-[10px] text-gray-500 uppercase tracking-widest">Faster energy cycling</div>
                 </button>
-                <button onclick="game.upgrade('magSize')" class="shop-item flex flex-col items-start p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-[#00FFFF] transition-all text-left group">
+                <button onclick="window.game.upgrade('magSize')" class="shop-item cursor-pointer flex flex-col items-start p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-[#00FFFF] transition-all text-left group">
                     <div class="text-xl font-black uppercase italic tracking-tight mb-1 group-hover:text-[#00FFFF]">Mag Size</div>
                     <div class="text-[10px] text-gray-500 uppercase tracking-widest">More shots per cell</div>
                 </button>
-                <button onclick="game.upgrade('heal')" class="shop-item flex flex-col items-start p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-red-500 transition-all text-left group">
+                <button onclick="window.game.upgrade('heal')" class="shop-item cursor-pointer flex flex-col items-start p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-red-500 transition-all text-left group">
                     <div class="text-xl font-black uppercase italic tracking-tight mb-1 group-hover:text-red-500">Heal System</div>
                     <div class="text-[10px] text-gray-500 uppercase tracking-widest">Restore 50% health</div>
                 </button>
@@ -115,7 +116,7 @@
         </div>
     </div>
 
-    <div id="screen-gameover" class="fixed inset-0 flex flex-col items-center justify-center bg-red-950/95 z-40 hidden opacity-0 transition-opacity duration-500">
+    <div id="screen-gameover" class="fixed inset-0 flex flex-col items-center justify-center bg-red-950/95 z-40 hidden opacity-0 transition-opacity duration-500 pointer-events-auto">
         <div class="text-center space-y-8">
             <h2 class="text-8xl font-black italic uppercase tracking-tighter text-white">
                 Arena Terminated
@@ -123,7 +124,7 @@
             <div id="final-stats" class="text-2xl font-mono text-white/80 uppercase tracking-widest">
                 Score: 0 | Wave: 0
             </div>
-            <button onclick="location.reload()" class="px-12 py-5 bg-white text-black font-black uppercase tracking-[0.2em] hover:bg-black hover:text-white transition-all duration-300">
+            <button onclick="location.reload()" class="cursor-pointer px-12 py-5 bg-white text-black font-black uppercase tracking-[0.2em] hover:bg-black hover:text-white transition-all duration-300 rounded-md">
                 Reboot System
             </button>
         </div>
@@ -132,7 +133,7 @@
     <!-- Crosshair -->
     <div id="crosshair" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
         <div class="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center">
-            <div class="w-1 h-1 bg-cyan rounded-full shadow-[0_0_10px_#00FFFF]"></div>
+            <div class="w-1 h-1 bg-cyan-400 rounded-full shadow-[0_0_10px_#00FFFF]"></div>
         </div>
     </div>
 
@@ -140,8 +141,8 @@
     <script type="importmap">
         {
             "imports": {
-                "three": "https://unpkg.com/three@0.162.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.162.0/examples/jsm/"
+                "three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/"
             }
         }
     </script>
@@ -175,15 +176,16 @@
                 // Scene
                 this.scene = new THREE.Scene();
                 this.scene.background = new THREE.Color(COLORS.BLACK);
+                this.scene.fog = new THREE.FogExp2(COLORS.BLACK, 0.015);
 
                 // Camera
                 this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
                 this.camera.position.set(0, 0, 0);
 
                 // Renderer
-                this.renderer = new THREE.WebGLRenderer({ antialias: true });
+                this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
                 this.renderer.setSize(window.innerWidth, window.innerHeight);
-                this.renderer.setPixelRatio(window.devicePixelRatio);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
                 this.renderer.toneMapping = THREE.ReinhardToneMapping;
                 document.body.appendChild(this.renderer.domElement);
 
@@ -209,7 +211,7 @@
                 pointLight.position.set(10, 10, 10);
                 this.scene.add(pointLight);
 
-                // Arena
+                // Arena Ground
                 const grid = new THREE.GridHelper(100, 50, COLORS.GRID, COLORS.GRID);
                 grid.position.y = -2;
                 this.scene.add(grid);
@@ -221,7 +223,7 @@
                 floor.position.y = -2.01;
                 this.scene.add(floor);
 
-                // Stars
+                // Background Stars
                 const starGeo = new THREE.BufferGeometry();
                 const starCount = 5000;
                 const starPos = new Float32Array(starCount * 3);
@@ -229,11 +231,11 @@
                     starPos[i] = (Math.random() - 0.5) * 500;
                 }
                 starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-                const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.5 });
+                const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.5, transparent: true, opacity: 0.6 });
                 const stars = new THREE.Points(starGeo, starMat);
                 this.scene.add(stars);
 
-                // Guns
+                // Player Guns
                 this.guns = {
                     left: this.createGun(COLORS.MAGENTA),
                     right: this.createGun(COLORS.CYAN)
@@ -299,8 +301,10 @@
                     setTimeout(() => {
                         document.getElementById('screen-start').style.display = 'none';
                         this.state.gameStarted = true;
-                        if (this.state.wave === 0) this.startWave();
-                    }, 500);
+                        if (this.state.wave === 0) {
+                            this.startWave();
+                        }
+                    }, 300);
                 });
 
                 this.controls.addEventListener('unlock', () => {
@@ -312,7 +316,7 @@
                 });
 
                 window.addEventListener('mousedown', (e) => {
-                    if (!this.state.gameStarted || this.state.isShopping || this.state.isGameOver) return;
+                    if (!this.state.gameStarted || this.state.isShopping || this.state.isGameOver || !this.controls.isLocked) return;
                     if (e.button === 0) this.shoot('left');
                     if (e.button === 2) this.shoot('right');
                 });
@@ -323,8 +327,10 @@
             startWave() {
                 this.state.wave++;
                 this.state.isShopping = false;
-                document.getElementById('screen-shop').style.opacity = '0';
-                setTimeout(() => document.getElementById('screen-shop').style.display = 'none', 500);
+                
+                const shopUI = document.getElementById('screen-shop');
+                shopUI.style.opacity = '0';
+                setTimeout(() => shopUI.style.display = 'none', 500);
                 
                 this.updateUI();
 
@@ -414,6 +420,10 @@
                 const right = new THREE.Vector3(1, 0, 0).applyQuaternion(this.camera.quaternion);
                 startPos.add(right.multiplyScalar(offset));
 
+                // Add slight recoil visual
+                this.guns[side].group.position.z += 0.1;
+                this.guns[side].group.rotation.x += 0.1;
+
                 this.spawnBullet(startPos, direction.multiplyScalar(0.8), true, 10 * this.state.upgrades.damage, side === 'left' ? COLORS.MAGENTA : COLORS.CYAN);
 
                 if (this.ammo[side] === 0) this.reload(side);
@@ -438,7 +448,7 @@
                 document.getElementById(`ammo-${side}`).classList.add('text-red-500');
 
                 setTimeout(() => {
-                    this.ammo[side] = this.state.upgrades.magSize;
+                    this.ammo[side] = Math.floor(this.state.upgrades.magSize);
                     this.reloading[side] = false;
                     this.guns[side].mat.opacity = 1;
                     const color = side === 'left' ? COLORS.MAGENTA : COLORS.CYAN;
@@ -455,7 +465,17 @@
                 } else {
                     this.state.upgrades[type] += (type === 'magSize' ? 4 : 0.2);
                 }
+                
+                // Immediately apply ammo upgrades if full
+                if (type === 'magSize') {
+                    if (!this.reloading.left) this.ammo.left = Math.floor(this.state.upgrades.magSize);
+                    if (!this.reloading.right) this.ammo.right = Math.floor(this.state.upgrades.magSize);
+                }
+
                 this.startWave();
+                
+                // Automatically re-lock pointer since upgrading requires a direct user click event
+                this.controls.lock(); 
             }
 
             updateUI() {
@@ -463,8 +483,9 @@
                 document.getElementById('wave-display').innerText = this.state.wave;
                 document.getElementById('health-bar').style.width = `${(this.state.health / this.state.maxHealth) * 100}%`;
                 
-                if (!this.reloading.left) document.getElementById('ammo-left').innerText = `${this.ammo.left}/${this.state.upgrades.magSize}`;
-                if (!this.reloading.right) document.getElementById('ammo-right').innerText = `${this.ammo.right}/${this.state.upgrades.magSize}`;
+                const magSize = Math.floor(this.state.upgrades.magSize);
+                if (!this.reloading.left) document.getElementById('ammo-left').innerText = `${this.ammo.left}/${magSize}`;
+                if (!this.reloading.right) document.getElementById('ammo-right').innerText = `${this.ammo.right}/${magSize}`;
             }
 
             animate() {
@@ -472,7 +493,7 @@
                 
                 const delta = this.clock.getDelta();
                 
-                if (this.state.gameStarted && !this.state.isGameOver && !this.state.isShopping) {
+                if (this.state.gameStarted && !this.state.isGameOver && !this.state.isShopping && this.controls.isLocked) {
                     this.updateGuns();
                     this.updateBullets();
                     this.updateEnemies();
@@ -490,9 +511,10 @@
                     targetPos.applyQuaternion(this.camera.quaternion);
                     targetPos.add(this.camera.position);
                     
+                    // Smoothly interpolate gun positions for a floating feel
                     gun.position.lerp(targetPos, 0.2);
                     gun.quaternion.slerp(this.camera.quaternion, 0.2);
-                    gun.position.y += Math.sin(time) * 0.005;
+                    gun.position.y += Math.sin(time + (side === 'left' ? 0 : Math.PI)) * 0.005;
                 });
             }
 
@@ -507,7 +529,7 @@
                         continue;
                     }
 
-                    // Player hit
+                    // Player taking damage from enemy bullets
                     if (!b.isPlayer && b.mesh.position.distanceTo(this.camera.position) < 1) {
                         this.takeDamage(b.damage);
                         this.scene.remove(b.mesh);
@@ -523,7 +545,7 @@
                     const e = this.enemies[i];
                     const toPlayer = new THREE.Vector3().subVectors(playerPos, e.mesh.position).normalize();
                     
-                    // Movement
+                    // Movement patterns based on type
                     if (e.type === 'popper') {
                         e.mesh.position.add(toPlayer.multiplyScalar(e.speed));
                     } else if (e.type === 'blaster' || e.type === 'sentinel') {
@@ -532,15 +554,23 @@
                             e.mesh.position.add(toPlayer.multiplyScalar(e.speed));
                         }
                         
-                        // Shoot
+                        // Enemy Shooting Logic
                         const now = Date.now();
                         if (now - e.lastShot > (e.type === 'sentinel' ? 3000 : 2000)) {
                             e.lastShot = now;
                             this.spawnBullet(e.mesh.position.clone(), toPlayer.clone().multiplyScalar(0.2), false, 10, COLORS.RED);
                         }
+                    } else if (e.type === 'jester') {
+                        // Erratic movement for jester
+                        e.mesh.position.add(toPlayer.multiplyScalar(e.speed));
+                        e.mesh.position.x += Math.sin(Date.now() * 0.005) * 0.1;
                     }
 
-                    // Collisions with bullets
+                    // Enemy visual rotation
+                    e.mesh.rotation.x += 0.01;
+                    e.mesh.rotation.y += 0.02;
+
+                    // Collisions with Player Bullets
                     for (let j = this.bullets.length - 1; j >= 0; j--) {
                         const b = this.bullets[j];
                         if (b.isPlayer && b.mesh.position.distanceTo(e.mesh.position) < 0.8) {
@@ -558,12 +588,13 @@
                         }
                     }
 
-                    // Melee hit
+                    // Melee hit damage if enemy gets too close
                     if (e.mesh.position.distanceTo(playerPos) < 1.5) {
                         this.takeDamage(0.5);
                     }
                 }
 
+                // Wave Complete check
                 if (this.enemies.length === 0 && this.state.gameStarted) {
                     this.openShop();
                 }
@@ -572,26 +603,32 @@
             takeDamage(amount) {
                 this.state.health = Math.max(0, this.state.health - amount);
                 this.updateUI();
+                
+                // Screen flash effect for damage could be added here
+                
                 if (this.state.health <= 0) this.gameOver();
             }
 
             openShop() {
                 this.state.isShopping = true;
                 this.controls.unlock();
-                document.getElementById('screen-shop').style.display = 'flex';
-                setTimeout(() => document.getElementById('screen-shop').style.opacity = '1', 10);
+                
+                const shopUI = document.getElementById('screen-shop');
+                shopUI.style.display = 'flex';
+                setTimeout(() => shopUI.style.opacity = '1', 10);
             }
 
             gameOver() {
                 this.state.isGameOver = true;
                 this.controls.unlock();
                 document.getElementById('final-stats').innerText = `Score: ${this.state.score.toLocaleString()} | Wave: ${this.state.wave}`;
-                document.getElementById('screen-gameover').style.display = 'flex';
-                setTimeout(() => document.getElementById('screen-gameover').style.opacity = '1', 10);
+                const gameOverUI = document.getElementById('screen-gameover');
+                gameOverUI.style.display = 'flex';
+                setTimeout(() => gameOverUI.style.opacity = '1', 10);
             }
         }
 
-        // Global game instance
+        // Attach to window so inline HTML onclick handlers can access the game instance
         window.game = new DualGunArena();
 
     </script>
